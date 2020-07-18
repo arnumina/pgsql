@@ -98,6 +98,14 @@ func (c *Client) Begin() (*Transaction, error) {
 	return t, nil
 }
 
+// Close AFAIRE.
+func (c *Client) Close() {
+	if c.pool != nil {
+		c.pool.Close() // BUG: doesn't give back the hand if the database is stopped and then restarted!
+		c.pool = nil
+	}
+}
+
 /*
 ######################################################################################################## @(°_°)@ #######
 */
