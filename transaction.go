@@ -11,7 +11,10 @@
 
 package pgsql
 
-import "github.com/jackc/pgx/v4"
+import (
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v4"
+)
 
 type (
 	// Transaction AFAIRE.
@@ -32,9 +35,8 @@ func (t *Transaction) Commit() error {
 }
 
 // Exec AFAIRE.
-func (t *Transaction) Exec(sql string, args ...interface{}) error {
-	_, err := t.tx.Exec(t.client.ctx, sql, args...)
-	return err
+func (t *Transaction) Exec(sql string, args ...interface{}) (pgconn.CommandTag, error) {
+	return t.tx.Exec(t.client.ctx, sql, args...)
 }
 
 // Query AFAIRE.

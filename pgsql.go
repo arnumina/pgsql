@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/arnumina/logger"
+	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -68,9 +69,8 @@ func (c *Client) Connect(uri string) error {
 }
 
 // Exec AFAIRE.
-func (c *Client) Exec(sql string, args ...interface{}) error {
-	_, err := c.pool.Exec(c.ctx, sql, args...)
-	return err
+func (c *Client) Exec(sql string, args ...interface{}) (pgconn.CommandTag, error) {
+	return c.pool.Exec(c.ctx, sql, args...)
 }
 
 // Query AFAIRE.
@@ -101,7 +101,7 @@ func (c *Client) Begin() (*Transaction, error) {
 // Close AFAIRE.
 func (c *Client) Close() {
 	if c.pool != nil {
-		c.pool.Close() // BUG: doesn't give back the hand if the database is stopped and then restarted!
+		c.pool.Close() // AFINIR: doesn't give back the hand if the database is stopped and then restarted!
 		c.pool = nil
 	}
 }
