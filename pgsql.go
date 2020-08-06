@@ -22,6 +22,17 @@ import (
 )
 
 type (
+	// Row AFAIRE.
+	Row interface {
+		Scan(dest ...interface{}) error
+	}
+
+	// Rows AFAIRE.
+	Rows interface {
+		Next() bool
+		Scan(dest ...interface{}) error
+	}
+
 	// Client AFAIRE.
 	Client struct {
 		logger *pgxLogger
